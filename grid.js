@@ -4,7 +4,6 @@ function grid() {
     stroke(0);
     let gridSize = int(width/amount);
     
-    let margin = gridSize*5;
     for (let x = 0; x < width; x += gridSize) {
       for (let y = 0; y < height; y += gridSize) {
         let foundColor = 0;
@@ -54,12 +53,9 @@ function grid() {
         let index = (x/gridSize + y/gridSize * amount) * 3;
         let greens = ["#03FF00", "#02C600", "#028E0D"];
         let beiges = ["#DBB77D", "#FCF2C8"];
-        if(foundColor === 1)
-        fill(greens[int(gridinfo[index+1])-1]);
-        else if(foundColor === 2)
-        fill(beiges[int(gridinfo[index+2])-1]);
-        else
-        fill(0);
+        if(foundColor === 1) fill(greens[int(gridinfo[index+1])-1]);
+        else if(foundColor === 2) fill(beiges[int(gridinfo[index+2])-1]);
+        else fill(0);
         
         push();
             translate(0, height%gridSize);
@@ -68,7 +64,7 @@ function grid() {
                 square(x+gridSize/2, y, gridSize/2);
                 square(x, y+gridSize/2, gridSize/2);
                 square(x+gridSize/2, y+gridSize/2, gridSize/2);
-            } else if(quadtree.checked() && gridinfo[index] == "1") {
+            } else if(subfour.checked() && gridinfo[index] == "f") {
                 square(x, y, gridSize/4);
                 square(x+gridSize/4, y, gridSize/4);
                 square(x+gridSize/2, y, gridSize/4);
@@ -77,29 +73,79 @@ function grid() {
                 square(x, y+gridSize/2, gridSize/4);
                 square(x, y+gridSize/4*3, gridSize/4);
                 square(x+gridSize/4, y+gridSize/4, gridSize/4*3);
-            } else if(quadtree.checked() && gridinfo[index] == "2") {
+            } else if(subfour.checked() && gridinfo[index] == "o") {
+                square(x, y, gridSize/4);
+                square(x+gridSize/4, y, gridSize/4);
+                square(x+gridSize/2, y, gridSize/4);
+                square(x+gridSize/4*3, y, gridSize/4);
+                square(x+gridSize/4*3, y+gridSize/4, gridSize/4);
+                square(x+gridSize/4*3, y+gridSize/2, gridSize/4);
+                square(x+gridSize/4*3, y+gridSize/4*3, gridSize/4);
+                square(x, y+gridSize/4, gridSize/4*3);
+            } else if(subfour.checked() && gridinfo[index] == "u") {
+                square(x, y, gridSize/4);
+                square(x+gridSize/4, y+gridSize/4*3, gridSize/4);
+                square(x+gridSize/2, y+gridSize/4*3, gridSize/4);
+                square(x+gridSize/4*3, y+gridSize/4*3, gridSize/4);
+                square(x, y+gridSize/4, gridSize/4);
+                square(x, y+gridSize/2, gridSize/4);
+                square(x, y+gridSize/4*3, gridSize/4);
+                square(x+gridSize/4, y, gridSize/4*3);
+            } else if(subfour.checked() && gridinfo[index] == "R") {
+                square(x+gridSize/4*3, y+gridSize/4*3, gridSize/4);
+                square(x, y+gridSize/4*3, gridSize/4);
+                square(x+gridSize/4, y+gridSize/4*3, gridSize/4);
+                square(x+gridSize/2, y+gridSize/4*3, gridSize/4);
+                square(x+gridSize/4*3, y, gridSize/4);
+                square(x+gridSize/4*3, y+gridSize/4, gridSize/4);
+                square(x+gridSize/4*3, y+gridSize/2, gridSize/4);
+                square(x, y, gridSize/4*3);
+            } else if(subthree.checked() && gridinfo[index] == "t") {
                 square(x, y, gridSize/3);
                 square(x+gridSize/3, y, gridSize/3);
                 square(x+gridSize/3*2, y, gridSize/3);
                 square(x, y+gridSize/3, gridSize/3);
                 square(x, y+gridSize/3*2, gridSize/3);
                 square(x+gridSize/3, y+gridSize/3, gridSize/3*2);
+            } else if(subthree.checked() && gridinfo[index] == "h") {
+                square(x+gridSize/3*2, y+gridSize/3*2, gridSize/3);
+                square(x+gridSize/3, y+gridSize/3*2, gridSize/3);
+                square(x+gridSize/3*2, y, gridSize/3);
+                square(x+gridSize/3*2, y+gridSize/3, gridSize/3);
+                square(x, y+gridSize/3*2, gridSize/3);
+                square(x, y, gridSize/3*2);
+            } else if(subthree.checked() && gridinfo[index] == "r") {
+                square(x, y, gridSize/3);
+                square(x+gridSize/3, y, gridSize/3);
+                square(x+gridSize/3*2, y, gridSize/3);
+                square(x+gridSize/3*2, y+gridSize/3, gridSize/3);
+                square(x+gridSize/3*2, y+gridSize/3*2, gridSize/3);
+                square(x, y+gridSize/3, gridSize/3*2);
+            } else if(subthree.checked() && gridinfo[index] == "e") {
+                square(x, y, gridSize/3);
+                square(x+gridSize/3, y+gridSize/3*2, gridSize/3);
+                square(x+gridSize/3*2, y+gridSize/3*2, gridSize/3);
+                square(x, y+gridSize/3, gridSize/3);
+                square(x, y+gridSize/3*2, gridSize/3);
+                square(x+gridSize/3, y, gridSize/3*2);
             } else square(x, y, gridSize);
         pop();
       }
     }
-
-    // noFill(); stroke(255); strokeWeight(1);
-    // rect(margin, height%gridSize, width - margin*2, int(height/gridSize)*gridSize);
 }
 
 function calcquad() {
     randomSeed(seed.value());
     gridinfo = "";
     let gridSize = int(width/amount);
+    let availableSubs = ["0"];
+    if(quadtree.checked()) availableSubs.push("Q");
+    if(subthree.checked()) availableSubs.push("t", "h", "r", "e");
+    if(subfour.checked()) availableSubs.push("f", "o", "u", "R");
+    print(availableSubs);
     for (let x = 0; x < width; x += gridSize) {
       for (let y = 0; y < height; y += gridSize) {
-        let isQuad = random(["Q", "N", "1", "2", "3", "4"]);
+        let isQuad = random(availableSubs);
         gridinfo = gridinfo + isQuad;
         let greenColor = random(["1", "2", "3"]);
         gridinfo = gridinfo + greenColor;
@@ -107,5 +153,5 @@ function calcquad() {
         gridinfo = gridinfo + beigeColor;
       }
     }
-    //print(gridinfo);
+    print(gridinfo);
 }
