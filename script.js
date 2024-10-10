@@ -1,13 +1,11 @@
-// extra todo: subdiv with stretch + fancy UI + separate ages
-// important: fix randomness in branches???
-
 var a = Math.PI/4;
 var slider, animated, angle, showGrid, weight, quadtree, subthree, subfour, gridSlider;
-var simpleCheck, addTree, removeTree;
+var simpleCheck, addTree, removeTree, treeNumber;
 var age = 0, seed = 0;
 var treeinfo;
 var amount = 30;
 var gridinfo = "";
+var branchinfo = [];
 var trees = [];
 
 function setup() {
@@ -21,7 +19,7 @@ function setup() {
     animated.style("color", "white");
     animated.mousePressed(function() { if(!animated.checked()) age = -PI/2 });
 
-    slider = createSlider(10, 180, 120);
+    slider = createSlider(10, 180, 180);
     slider.mouseReleased(tree);
     slider.position(50, 75);
 
@@ -49,46 +47,46 @@ function setup() {
     let seedText = createP("seed number:");
     seedText.style("color", "white");
     seedText.position(50, 190);
-    seed = createInput("6", "number");
+    seed = createInput("3", "number");
     seed.style("width", "50px");
-    seed.changed(calcquad);
+    seed.changed(function() {
+      generate(180);
+      calcquad();
+    });
     seed.position(140, 205);
 
-    let angleText = createP("branch angles:");
+    let angleText = createP("angle margin:");
     angleText.style("color", "white");
-    angleText.position(50, 220);
-    angle = createSlider(PI/16, PI/4, PI/8, 0.01);
-    angle.position(150, 236);
+    angleText.position(50, 250);
+    angle = createSlider(0, PI/2, 0, 0.01);
+    angle.position(145, 266);
+    angle.style("width", "80px");
 
     let weightText = createP("stroke weight:");
     weightText.style("color", "white");
-    weightText.position(50, 250);
-    weight = createSlider(0, amount, 4);
-    weight.position(150, 267);
+    weightText.position(50, 220);
+    weight = createSlider(0, amount/2, 4);
+    weight.position(150, 236);
+    weight.style("width", "80px");
 
+    /* some old unused functionalities, not working */
+    // simpleCheck = createCheckbox("simple color checking");
     // gridSlider = createInput("30", "number");
-    // gridSlider.position(50, 225);
-    // gridSlider.style("width", "100px");
     // gridSlider.changed(calcquad);
 
-    // simpleCheck = createCheckbox("simple color checking");
-    // simpleCheck.checked(false);
-    // simpleCheck.position(50, 250);
-    // simpleCheck.style("color", "white");
-
-    addTree = createButton("add tree");
-    addTree.position(50, 300);
-    addTree.mousePressed(function() { trees.push(random(width)); });
-    removeTree = createButton("remove tree");
-    removeTree.position(50, 330);
-    removeTree.mousePressed(function() { if(trees.length > 1) trees.pop(); });
+    let amountText = createP("number of trees:");
+    amountText.style("color", "white");
+    amountText.position(50, 280);
+    treeNumber = createSlider(1, 7, 1, 1);
+    treeNumber.position(160, 295);
+    treeNumber.style("width", "80px");
 
     calcquad();
+    generate(180);
 }
 
 function draw() {
-  a = angle.value();
-  //amount = int(gridSlider.value());
+  // amount = int(gridSlider.value());
   
   if(animated.checked()) { 
     slider.value(map(sin(age), -1, 1, 10, 180));

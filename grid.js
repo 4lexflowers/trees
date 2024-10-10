@@ -8,8 +8,8 @@ function grid() {
       for (let y = 0; y < height; y += gridSize) {
         let foundColor = 0;
         
+        // unused functionality, to check fewer pixels
         // if(!simpleCheck.checked()) {
-            // this checks EACH pixel, maybe we could do corners + center
             for (let i = 0; i < gridSize; i++) {
                 for (let j = 0; j < gridSize; j++) {
                     let px = x + i;
@@ -46,6 +46,7 @@ function grid() {
         //         }
         //     }
         // }
+        // this unused functionality checks corners and center, maybe we could do the entire side pixels, but only the center inside
 
         stroke(0);
         strokeWeight(weight.value());
@@ -142,7 +143,6 @@ function calcquad() {
     if(quadtree.checked()) availableSubs.push("Q");
     if(subthree.checked()) availableSubs.push("t", "h", "r", "e");
     if(subfour.checked()) availableSubs.push("f", "o", "u", "R");
-    print(availableSubs);
     for (let x = 0; x < width; x += gridSize) {
       for (let y = 0; y < height; y += gridSize) {
         let isQuad = random(availableSubs);
@@ -153,5 +153,4 @@ function calcquad() {
         gridinfo = gridinfo + beigeColor;
       }
     }
-    print(gridinfo);
 }
