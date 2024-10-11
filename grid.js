@@ -1,7 +1,6 @@
 function grid() {
     background(0);
     rectMode(CORNER);
-    stroke(0);
     let gridSize = int(width/amount);
     
     for (let x = 0; x < width; x += gridSize) {
@@ -19,24 +18,24 @@ function grid() {
                     let r = treeinfo.pixels[index];
                     let g = treeinfo.pixels[index + 1];
                     let b = treeinfo.pixels[index + 2];
-                    if(r == 0 && g == 128 && b == 0) {
-                        foundColors[i][j] = 1;
-                    } else if(r == 200 && g == 120 && b == 50) {
-                        foundColors[i][j] = 2;
-                    } else foundColors[i][j] = 0;
+                    if(pixelPerfect.checked()) {
+                        if(r == 0 && g == 128 && b == 0) {
+                            foundColors[i][j] = 1;
+                        } else if(r == 200 && g == 120 && b == 50) {
+                            foundColors[i][j] = 2;
+                        } else foundColors[i][j] = 0;
+                    } else {
+                        if(g > r) {
+                            foundColors[i][j] = 1;
+                        } else if(r != 0) {
+                            foundColors[i][j] = 2;
+                        } else foundColors[i][j] = 0;
+                    }
                 }
             }
         }
         
-        let index = (x/gridSize + y/gridSize * amount) * (1 + 2*8);
-        // let greens = ["#03FF00", "#02C600", "#028E0D"];
-        // let beiges = ["#DBB77D", "#FCF2C8"];
-
-        // if(foundColors === 1) fill(greens[int(gridinfo[index+1])-1]);
-        // else if(foundColors === 2) fill(beiges[int(gridinfo[index+2])-1]);
-        // else fill(0);
-        stroke(0);
-        strokeWeight(weight.value());
+        let index = (x/gridSize + y/gridSize * amount) * (1 + 2*8);        
         
         push();
             translate(0, height%gridSize);
@@ -45,10 +44,6 @@ function grid() {
                 drawSquare(foundColors, x, y, x+gridSize/2, y, gridSize/2, 1);
                 drawSquare(foundColors, x, y, x, y+gridSize/2, gridSize/2, 2);
                 drawSquare(foundColors, x, y, x+gridSize/2, y+gridSize/2, gridSize/2, 3);
-                // square(x, y, gridSize/2);
-                // square(x+gridSize/2, y, gridSize/2);
-                // square(x, y+gridSize/2, gridSize/2);
-                // square(x+gridSize/2, y+gridSize/2, gridSize/2);
             } else if(subfour.checked() && gridinfo[index] == "f") {
                 drawSquare(foundColors, x, y, x, y, gridSize/4, 0);
                 drawSquare(foundColors, x, y, x+gridSize/4, y, gridSize/4, 1);
@@ -161,35 +156,40 @@ function drawSquare(colorArray, x, y, tx, ty, s, ind) {
 
     for (let i = checkStart[0]; i < checkEnd[0]; i++) {
         for (let j = checkStart[1]; j < checkEnd[1]; j++) {
-            // if(colorArray[i]) {
-                if((colorArray[i][j] != undefined && gridType.selected() == "pixel perfect check") ||
-                    (colorArray[i][j] && gridType.selected() == "tree check") || gridType.selected() == "block") {  
-                    if(colorArray[i][j] === 1) {
-                        majority[1]++;
-                        atLeastOne.green = true;
-                    } else if(colorArray[i][j] === 2) {
-                        majority[2]++;
-                        atLeastOne.brown = true;
-                    } else if(colorArray[i][j] === 0) {
-                        majority[0]++;
-                    }
+            if((colorArray[i][j] != undefined && gridType.selected() == "pixel perfect check") ||
+                (colorArray[i][j] && gridType.selected() == "tree check") || gridType.selected() == "block") {  
+                if(colorArray[i][j] === 1) {
+                    majority[1]++;
+                    atLeastOne.green = true;
+                } else if(colorArray[i][j] === 2) {
+                    majority[2]++;
+                    atLeastOne.brown = true;
+                } else if(colorArray[i][j] === 0) {
+                    majority[0]++;
                 }
-            // }
+            }
         }
     }
-    //if(mouseX > tx && mouseX < tx + s && mouseY > ty && mouseY < ty + s) print(majority[0], majority[1], majority[2]);
+
+    let colorToPaint = 0;
 
     if(gridType.selected() == "block") {
-        if(atLeastOne.green) fill(greens[int(gridinfo[index+1])-1]);
-        else if(atLeastOne.brown) fill(beiges[int(gridinfo[index+2])-1]);
-        else fill(0);
+        if(atLeastOne.green) colorToPaint = greens[int(gridinfo[index+1])-1];
+        else if(atLeastOne.brown) colorToPaint = beiges[int(gridinfo[index+2])-1];
     } else {
         if(majority[1] > majority[2] && majority[1] > majority[0])
-            fill(greens[int(gridinfo[index+1+2*ind])-1]);
+            colorToPaint = greens[int(gridinfo[index+1+2*ind])-1];
         else if(majority[2] > majority[0] && majority[2] > majority[1])
-            fill(beiges[int(gridinfo[index+2+2*ind])-1]);
-        else fill(0);
+            colorToPaint = beiges[int(gridinfo[index+2+2*ind])-1];
     }
 
+    if(weight.value() > 0) {
+        stroke(0);
+        strokeWeight(weight.value());
+    } else {
+        noStroke();
+    }
+
+    fill(colorToPaint);
     square(tx, ty, s);
 }

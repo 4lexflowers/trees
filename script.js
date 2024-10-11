@@ -1,6 +1,5 @@
 var a = Math.PI/4;
-var slider, animated, angle, showGrid, weight, quadtree, subthree, subfour, gridSlider;
-var simpleCheck, addTree, removeTree, treeNumber, gridType;
+var slider, animated, angle, showGrid, weight, quadtree, subthree, subfour, treeNumber, gridType, pixelPerfect;
 var age = 0, seed = 0;
 var treeinfo;
 var amount = 30;
@@ -69,11 +68,6 @@ function setup() {
     weight.position(150, 236);
     weight.style("width", "80px");
 
-    /* some old unused functionalities, not working */
-    // simpleCheck = createCheckbox("simple color checking");
-    // gridSlider = createInput("30", "number");
-    // gridSlider.changed(calcquad);
-
     let amountText = createP("number of trees:");
     amountText.style("color", "white");
     amountText.position(50, 280);
@@ -89,14 +83,17 @@ function setup() {
     gridType.option("tree check");
     gridType.option("pixel perfect check");
     gridType.position(120, 326);
+    gridType.selected("tree check");
+
+    pixelPerfect = createCheckbox("pixel perfect");
+    pixelPerfect.position(50, 360);
+    pixelPerfect.style("color", "white");
 
     calcquad();
     generate(180);
 }
 
 function draw() {
-  // amount = int(gridSlider.value());
-  
   if(animated.checked()) { 
     slider.value(map(sin(age), -1, 1, 10, 180));
     age+=0.05;
