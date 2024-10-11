@@ -156,8 +156,8 @@ function drawSquare(colorArray, x, y, tx, ty, s, ind) {
 
     for (let i = checkStart[0]; i < checkEnd[0]; i++) {
         for (let j = checkStart[1]; j < checkEnd[1]; j++) {
-            if((colorArray[i][j] != undefined && gridType.selected() == "pixel perfect check") ||
-                (colorArray[i][j] && gridType.selected() == "tree check") || gridType.selected() == "block") {  
+            if((colorArray[i][j] != undefined && gridType.selected() == "majority") ||
+                (colorArray[i][j] && gridType.selected() == "nature") || gridType.selected() == "block") {  
                 if(colorArray[i][j] === 1) {
                     majority[1]++;
                     atLeastOne.green = true;

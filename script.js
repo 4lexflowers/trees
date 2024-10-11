@@ -80,10 +80,10 @@ function setup() {
     gridText.position(50, 310);
     gridType = createSelect();
     gridType.option("block");
-    gridType.option("tree check");
-    gridType.option("pixel perfect check");
+    gridType.option("nature");
+    gridType.option("majority");
     gridType.position(120, 326);
-    gridType.selected("tree check");
+    gridType.selected("nature");
 
     pixelPerfect = createCheckbox("pixel perfect");
     pixelPerfect.position(50, 360);
