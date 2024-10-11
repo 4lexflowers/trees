@@ -1,5 +1,5 @@
 var a = Math.PI/4;
-var slider, animated, angle, showGrid, weight, quadtree, subthree, subfour, treeNumber, gridType, pixelPerfect;
+var slider, animated, angle, showGrid, weight, quadtree, subthree, subfour, clearGrid, treeNumber, gridType, pixelPerfect;
 var age = 0, seed = 0;
 var treeinfo;
 var amount = 30;
@@ -27,21 +27,30 @@ function setup() {
     showGrid.position(50, 100);
     showGrid.style("color", "white");
 
+    bigBlock = createCheckbox("apply 1/1");
+    bigBlock.checked(true);
+    bigBlock.position(70, 125);
+    bigBlock.style("color", "white");
+    bigBlock.changed(calcquad);
     quadtree = createCheckbox("apply 1/2");
     quadtree.checked(true);
-    quadtree.position(70, 125);
+    quadtree.position(70, 150);
     quadtree.style("color", "white");
     quadtree.changed(calcquad);
     subthree = createCheckbox("apply 1/3");
     subthree.checked(true);
-    subthree.position(70, 150);
+    subthree.position(170, 125);
     subthree.style("color", "white");
     subthree.changed(calcquad);
     subfour = createCheckbox("apply 1/4");
     subfour.checked(false);
-    subfour.position(70, 175);
+    subfour.position(170, 150);
     subfour.style("color", "white");
     subfour.changed(calcquad);
+    clearGrid = createCheckbox("white grid");
+    clearGrid.checked(false);
+    clearGrid.position(50, 175);
+    clearGrid.style("color", "white");
 
     let seedText = createP("seed number:");
     seedText.style("color", "white");

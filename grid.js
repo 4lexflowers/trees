@@ -108,7 +108,8 @@ function grid() {
                 drawSquare(foundColors, x, y, x, y+gridSize/3, gridSize/3, 3);
                 drawSquare(foundColors, x, y, x, y+gridSize/3*2, gridSize/3, 4);
                 drawSquare(foundColors, x, y, x+gridSize/3, y, gridSize/3*2, 5);
-            } else drawSquare(foundColors, x, y, x, y, gridSize, 0);
+            } else if(gridinfo[index] == "0")
+                drawSquare(foundColors, x, y, x, y, gridSize, 0);
         pop();
       }
     }
@@ -118,10 +119,12 @@ function calcquad() {
     randomSeed(seed.value());
     gridinfo = "";
     let gridSize = int(width/amount);
-    let availableSubs = ["0"];
+    let availableSubs = [];
+    if(bigBlock.checked()) availableSubs.push("0");
     if(quadtree.checked()) availableSubs.push("Q");
     if(subthree.checked()) availableSubs.push("t", "h", "r", "e");
     if(subfour.checked()) availableSubs.push("f", "o", "u", "R");
+    if(availableSubs == []) availableSubs.push("x");
     for (let x = 0; x < width; x += gridSize) {
       for (let y = 0; y < height; y += gridSize) {
         let isQuad = random(availableSubs);
@@ -191,5 +194,6 @@ function drawSquare(colorArray, x, y, tx, ty, s, ind) {
     }
 
     fill(colorToPaint);
+    if(clearGrid.checked()) fill(255);
     square(tx, ty, s);
 }
