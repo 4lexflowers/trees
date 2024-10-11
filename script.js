@@ -1,6 +1,6 @@
 var a = Math.PI/4;
 var slider, animated, angle, showGrid, weight, quadtree, subthree, subfour, gridSlider;
-var simpleCheck, addTree, removeTree, treeNumber;
+var simpleCheck, addTree, removeTree, treeNumber, gridType;
 var age = 0, seed = 0;
 var treeinfo;
 var amount = 30;
@@ -80,6 +80,15 @@ function setup() {
     treeNumber = createSlider(1, 7, 1, 1);
     treeNumber.position(160, 295);
     treeNumber.style("width", "80px");
+
+    let gridText = createP("grid type:");
+    gridText.style("color", "white");
+    gridText.position(50, 310);
+    gridType = createSelect();
+    gridType.option("block");
+    gridType.option("tree check");
+    gridType.option("pixel perfect check");
+    gridType.position(120, 326);
 
     calcquad();
     generate(180);
